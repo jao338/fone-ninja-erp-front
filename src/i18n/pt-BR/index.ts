@@ -1,6 +1,6 @@
 export default {
   lorem: 'Lorem',
-  nomeEmpresa: 'C.R.M. Soluções',
+  nomeEmpresa: 'Fone Ninja',
   loginFeitoSucesso: 'Login feito com sucesso!',
   teste: 'Teste',
   login: 'Login',
