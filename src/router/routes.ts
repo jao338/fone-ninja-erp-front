@@ -25,45 +25,45 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/Index/IndexPage.vue')
       },
       {
-        path: 'exemplo',
+        path: 'products',
         meta: {
           requiresAuth: true,
           breadCrumbLink: true,
-          breadCrumbIcon: 'example',
-          breadCrumbLabel: 'exemplo',
+          breadCrumbIcon: 'product',
+          breadCrumbLabel: 'produto',
         },
-        redirect: { name: 'example-index' },
-        component: () => import('pages/Example/ExampleLayout.vue'),
+        redirect: { name: 'product-index' },
+        component: () => import('pages/Product/ProductLayout.vue'),
         children: [
           {
             path: '',
-            name: 'exemplo',
+            name: 'product',
             meta: {
               breadCrumbLink: true,
-              breadCrumbIcon: 'example',
-              breadCrumbLabel: 'exemplo',
+              breadCrumbIcon: 'product',
+              breadCrumbLabel: 'produto',
             },
-            component: () => import('pages/Example/ExamplePage.vue')
+            component: () => import('pages/Product/ProductPage.vue')
           },
           {
-            path: 'adicionar',
-            name: 'exemplo-adicionar',
+            path: 'add',
+            name: 'product-add',
             meta: {
               breadCrumbLink: false,
               breadCrumbIcon: 'add',
               breadCrumbLabel: 'adicionar',
             },
-            component: () => import('pages/Example/ExampleForm.vue')
+            component: () => import('pages/Product/ProductForm.vue')
           },
           {
-            path: 'editar/:uuid_exemplo',
-            name: 'exemplo-editar',
+            path: 'edit/:uuid_product',
+            name: 'product-edit',
             meta: {
               breadCrumbLink: false,
               breadCrumbIcon: 'edit',
               breadCrumbLabel: 'editar',
             },
-            component: () => import('pages/Example/ExampleForm.vue')
+            component: () => import('pages/Product/ProductForm.vue')
           },
         ]
       },
