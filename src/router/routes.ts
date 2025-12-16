@@ -67,6 +67,49 @@ const routes: RouteRecordRaw[] = [
           },
         ]
       },
+      {
+        path: 'shoppings',
+        meta: {
+          requiresAuth: true,
+          breadCrumbLink: true,
+          breadCrumbIcon: 'shopping',
+          breadCrumbLabel: 'compra',
+        },
+        redirect: { name: 'shopping-index' },
+        component: () => import('pages/Shopping/ShoppingLayout.vue'),
+        children: [
+          {
+            path: '',
+            name: 'shopping',
+            meta: {
+              breadCrumbLink: true,
+              breadCrumbIcon: 'shopping',
+              breadCrumbLabel: 'compra',
+            },
+            component: () => import('pages/Shopping/ShoppingPage.vue')
+          },
+          {
+            path: 'add',
+            name: 'shopping-add',
+            meta: {
+              breadCrumbLink: false,
+              breadCrumbIcon: 'add',
+              breadCrumbLabel: 'adicionar',
+            },
+            component: () => import('pages/Shopping/ShoppingForm.vue')
+          },
+          {
+            path: 'edit/:uuid_shopping',
+            name: 'shopping-edit',
+            meta: {
+              breadCrumbLink: false,
+              breadCrumbIcon: 'edit',
+              breadCrumbLabel: 'editar',
+            },
+            component: () => import('pages/Shopping/ShoppingForm.vue')
+          },
+        ]
+      },
     ],
   },
   {

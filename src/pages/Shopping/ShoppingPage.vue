@@ -1,30 +1,15 @@
 <template>
-  <CardGeneric :label="$t('produto')">
+  <CardGeneric :label="$t('compra', 2)">
       <q-form
         ref="formRef"
         @submit.prevent="searchData()"
         class="row q-pa-md q-col-gutter-md"
       >
         <q-card-section class="row col-12 justify-start">
-          <InputText
-            v-model="form.nome"
-            :label="t('nome')"
-            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
-          />
-          <InputMoney
-            v-model="form.custo_medio"
-            :label="t('custoMedio')"
-            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
-          />
-          <InputMoney
-            v-model="form.preco_venda"
-            :label="t('precoVenda')"
-            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
-          />
 
-          <InputText
-            v-model="form.quantidade"
-            :label="t('quantidade')"
+          <InputMoney
+            v-model="form.total"
+            :label="t('total')"
             class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
           />
 
@@ -93,23 +78,22 @@
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { productStore } from 'stores/product';
+import { shoppingStore } from 'stores/shopping';
 
 import CardGeneric from 'components/cards/CardGeneric.vue';
 import ButtonGeneric from 'components/buttons/ButtonGeneric.vue';
 import DefaultTable from 'components/tables/DefaultTable.vue';
-import InputText from 'components/inputs/InputText.vue';
 import InputMoney from '../../components/inputs/InputMoney.vue';
 import InputDateTime from '../../components/inputs/InputDateTime.vue';
 
 import useDialog from 'src/composables/useDialog';
 import useHelpers from 'src/composables/useHelpers';
-import useProductService from './Util/ProductService';
+import useShoppingService from './Util/ShoppingService';
 import useFormat from 'src/composables/useFormat';
 
-import { type QTableColumn } from 'quasar';
-import type { Product, ProductFilter } from './Util/ProductInterface';
-import { type Pagination, type RequestErrors } from 'src/util/Interface';
+import type { QTableColumn } from 'quasar';
+import type { Shopping, ShoppingFilter } from './Util/ShoppingInterface';
+import type { Pagination, RequestErrors } from 'src/util/Interface';
 
 const { t } = useI18n();
 
@@ -120,22 +104,18 @@ const {
 } = useHelpers();
 const { formatDate, formatSizes } = useFormat();
 const { confirmDelete } = useDialog();
-const { index, destroy } = useProductService('products');
+const { index, destroy } = useShoppingService('shopping');
 
-const useProductStore = productStore();
+const useShoppingStore = shoppingStore();
 
 const loadingSubmit = ref<boolean>(false);
 const loadingData = ref<boolean>(false);
 const formRef = ref<HTMLFormElement | null>(null);
 const errors = ref<RequestErrors>({});
-const rows = ref<Product[]>([]);
+const rows = ref<Shopping[]>([]);
 const pagination = ref<Pagination>(getPagination({ sortBy: 'id' }));
-const form = ref<ProductFilter>({
-  uuid: '',
-  nome: '',
-  custo_medio: 0,
-  preco_venda: 0,
-  quantidade: 0,
+const form = ref<ShoppingFilter>({
+  total: 0,
   criado_em: '',
   atualizado_em: '',
 });
@@ -211,7 +191,7 @@ async function fetchData(): Promise<void> {
   try {
     toggleLoading(loadingData);
 
-    const data = await index<Product>({
+    const data = await index<Shopping>({
       ...form.value,
       page: pagination.value.page,
       por_pagina: pagination.value.rowsPerPage,
@@ -235,20 +215,20 @@ async function fetchData(): Promise<void> {
   }
 }
 
-async function edit(uuid_product: string): Promise<void> {
-  useProductStore.setUuidProduct(uuid_product);
+async function edit(uuid_shopping: string): Promise<void> {
+  useShoppingStore.setUuidShopping(uuid_shopping);
   await router.push({
-    name: 'product-edit',
-    params: { uuid_product: useProductStore.uuid_product },
+    name: 'shopping-edit',
+    params: { uuid_shopping: useShoppingStore.uuid_shopping },
   });
 }
 
-function remove(uuid_product: string): void {
+function remove(uuid_shopping: string): void {
   confirmDelete().onOk(() => {
     void (async () => {
       toggleLoading(loadingData);
       try {
-        await destroy(uuid_product);
+        await destroy(uuid_shopping);
       } finally {
         toggleLoading(loadingData);
       }
@@ -257,11 +237,11 @@ function remove(uuid_product: string): void {
 }
 
 defineOptions({
-  name: 'ProductPage',
+  name: 'ShoppingPage',
 });
 
 onMounted(async () => {
-  useProductStore.resetUuidProduct();
+  useShoppingStore.resetUuidShopping();
   await searchData();
 });
 
