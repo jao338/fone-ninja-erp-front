@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  front:
+    container_name: quasar-front
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - HOST=0.0.0.0
+    command: npm run dev
