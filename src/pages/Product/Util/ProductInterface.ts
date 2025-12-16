@@ -5,8 +5,3 @@ export interface Product {
   preco_venda: number;
   quantidade: number;
 }
-export interface ProductSearch {
-  uuid_exemplo: string;
-  coluna_um: string;
-  coluna_dois: string;
-}

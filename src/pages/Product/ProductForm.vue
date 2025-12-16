@@ -1,7 +1,7 @@
 <template>
   <CardGeneric
-    :label="useProductStore.uuidProduct ? $t('editar') : $t('adicionar')"
-    :icon="useProductStore.uuidProduct ? 'edit' : 'add'"
+    :label="useProductStore.uuid_product ? $t('editar') : $t('adicionar')"
+    :icon="useProductStore.uuid_product ? 'edit' : 'add'"
   >
     <div v-if="loadingData" class="row q-col-gutter-md q-pa-md">
       <template v-for="(element, index) in skeleton" :key="index">
@@ -89,7 +89,7 @@ import { useMeta } from 'quasar';
 
 const { validateRequiredField } = useValidations();
 const { toggleLoading } = useHelpers();
-const { create, update, show } = useProductService('exemplos');
+const { create, update, show } = useProductService('products');
 const { t } = useI18n();
 
 const useProductStore = productStore();
@@ -113,7 +113,7 @@ const skeleton: SkeletonItem[] = [
 async function showForm(): Promise<void> {
   toggleLoading(loadingData);
   try {
-    const data = await show<Product>(useProductStore.uuidProduct);
+    const data = await show<Product>(useProductStore.uuid_product);
     form.value = data.data;
   } catch {
     return;
@@ -125,11 +125,11 @@ async function showForm(): Promise<void> {
 async function submitForm(): Promise<void> {
   toggleLoading(loadingSubmit);
   try {
-    if(!useProductStore.uuidProduct){
+    if(!useProductStore.uuid_product){
       const data = await create<Product>(form.value);
       useProductStore.setUuidProduct(data.data.uuid);
     }else{
-      await update(useProductStore.uuidProduct, form.value);
+      await update(useProductStore.uuid_product, form.value);
     }
 
   } catch (error: any) {
@@ -142,7 +142,7 @@ async function submitForm(): Promise<void> {
 
 useMeta(() => {
   return {
-    title: (t('produto') + ' - ') + (useProductStore.uuidProduct ? t('editar') : t('adicionar')),
+    title: (t('produto') + ' - ') + (useProductStore.uuid_product ? t('editar') : t('adicionar')),
   };
 });
 
@@ -151,7 +151,7 @@ defineOptions({
 });
 
 onMounted(async () => {
-  if(useProductStore.uuidProduct){
+  if(useProductStore.uuid_product){
     await showForm();
   }
 })
