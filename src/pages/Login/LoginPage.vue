@@ -1,0 +1,124 @@
+<template>
+  <q-layout>
+    <q-page-container>
+      <q-page class="flex flex-center column bg-grey-3">
+        <q-card class="card-login q-pa-sm">
+          <q-card-section class="text-center q-ma-lg">
+            <LogoLogin />
+          </q-card-section>
+
+          <q-card-section class="q-pa-none">
+            <p
+              class="q-ma-none text-h5 text-weight-bold text-center"
+              style="color: #076bb3"
+            >
+              {{ t('login') }}
+            </p>
+          </q-card-section>
+
+          <q-card-section>
+            <q-form ref="formRef" @submit.prevent="login" class="q-gutter-lg">
+              <InputText
+                v-model="form.cad_e_mail"
+                data-cy="text-cad_e_mail"
+                has-request-errors
+                :label="$t('email')"
+                :rules="[validaterequiredField, validateEmail]"
+                :request-errors="{ errors: errors, field: 'cad_e_mail'} "
+              />
+
+              <InputPassword
+                data-cy="text-cad_senha"
+                v-model="form.cad_senha"
+                :label="$t('senha')"
+                :rules="[validaterequiredField]"
+              />
+
+              <q-card-actions class="q-pa-none">
+                <ButtonGeneric
+                  type="submit"
+                  color="primary"
+                  icon="login"
+                  data-cy="btn-login"
+                  :loading="loadingLogin"
+                  :label="$t('login')"
+                  class="full-width button-rounded"
+                />
+              </q-card-actions>
+
+              <q-card-actions class="justify-between q-pa-none q-mt-xl">
+                <InputCheckbox
+                  v-model="form.remember"
+                  :label="$t('lembrarMe')"
+                />
+
+                <q-img src="~src/assets/images/crm_logo_blue.png" width="80px"/>
+
+              </q-card-actions>
+            </q-form>
+          </q-card-section>
+        </q-card>
+      </q-page>
+    </q-page-container>
+  </q-layout>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useMeta } from 'quasar';
+import { useI18n } from 'vue-i18n';
+
+import { type AuthForm } from './Util/LoginInterface';
+import { type RequestErrors } from 'src/util/Interface';
+
+import useValidations from 'src/composables/useValidations';
+import useHelpers from 'src/composables/useHelpers';
+import useLoginService from './Util/LoginService';
+
+import InputText from 'src/components/inputs/InputText.vue';
+import InputPassword from 'src/components/inputs/InputPassword.vue';
+import InputCheckbox from 'src/components/inputs/InputCheckbox.vue';
+import ButtonGeneric from 'src/components/buttons/ButtonGeneric.vue';
+import LogoLogin from 'src/components/utils/LogoLogin.vue';
+
+const { validaterequiredField, validateEmail } = useValidations();
+const { toggleLoading } = useHelpers();
+const { fetchLogin } = useLoginService('/login');
+const { t } = useI18n();
+
+const errors = ref<RequestErrors>({});
+const loadingLogin = ref<boolean>(false);
+const formRef = ref<HTMLFormElement | null>(null);
+const form = ref<AuthForm>({
+  cad_e_mail: '',
+  cad_senha: '',
+  remember: true,
+});
+
+async function login(): Promise<void> {
+  toggleLoading(loadingLogin);
+  try {
+    await fetchLogin(form.value);
+  } catch (error: any) {
+    errors.value = error.response?.data.errors ?? {};
+  } finally {
+    toggleLoading(loadingLogin);
+  }
+}
+
+useMeta(() => {
+  return {
+    title: t('login'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('login'),
+      },
+    },
+  };
+});
+
+defineOptions({
+  name: 'LoginPage',
+});
+</script>

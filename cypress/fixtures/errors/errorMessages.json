@@ -1,0 +1,16 @@
+{
+  "elementNotFound": "O elemento esperado não foi encontrado no DOM.",
+  "expectedNotExist": "Era esperado que o elemento não estivesse presente no DOM.",
+  "expectedNotToBeEmpty": "Era esperado que o conteúdo ou a resposta não fosse vazio(a).",
+  "noAliasFound": "Nenhum alias registrado foi encontrado.",
+  "fileNotFound": "O arquivo especificado não foi encontrado no caminho informado.",
+  "invalidCharacter": "Os caracteres informados não são suportados.",
+  "expectedNotToBeVisible": "O elemento não deveria estar visível na tela.",
+  "noClickableElement": "O elemento não está visível ou está coberto por outro elemento. Caso necessário, use 'cy.get(element).click({force: true})'.",
+  "nullTyped": "O comando 'cy.type()' exige uma string não vazia ou um número. O valor informado é nulo ou inválido.",
+  "responseTimeout": "O tempo limite de espera pela resposta da API foi atingido.",
+  "unexpectedURL": "A URL ou status retornado não corresponde ao esperado.",
+  "clickOnSingleElement": "Não foi possível clicar porque o seletor corresponde a mais de um elemento. Use 'cy.get(element).click({ multiple: true })' se quiser clicar em todos.",
+  "genericError": "Ocorreu um erro inesperado durante o teste.",
+  "noRequestFound": "Nenhuma requisição correspondente ao alias foi detectada no tempo limite."
+}
