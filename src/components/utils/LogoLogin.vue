@@ -1,6 +1,6 @@
 <template>
   <q-img
-    src="~src/assets/images/crm_logo_blue.png"
+    src="~src/assets/images/git.png"
     :class="{
       'logo-login-sm': $q.screen.lt.md,
       'logo-login-lg': $q.screen.gt.sm,

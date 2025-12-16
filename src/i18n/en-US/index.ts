@@ -1,10 +1,11 @@
 export default {
   lorem: 'Lorem',
-  nomeEmpresa: 'C.R.M. Soluções',
+  loginFeitoSucesso: 'Login successfully',
+  nomeEmpresa: 'Fone Ninja',
   teste: 'Test',
   login: 'Login',
   email: 'E-mail',
-  senha: 'Passoword',
+  senha: 'Password',
   lembrarMe: 'Remember me',
   configuracao: 'Configuration | Configurations',
   modoEscuro: 'Dark Mode',

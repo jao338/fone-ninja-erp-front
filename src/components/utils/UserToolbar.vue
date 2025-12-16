@@ -4,7 +4,7 @@
     class="bg-white text-primary"
     round
     push
-    :label="user?.cad_razao_social.substring(0, 2).toUpperCase() ?? ''"
+    :label="user?.nome.substring(0, 2).toUpperCase() ?? ''"
   >
     <q-menu
       data-cy="menu-user"
@@ -50,7 +50,7 @@
         />
 
         <div class="column menu-column">
-          <div class="text-subtitle1 q-mb-md">{{ user?.cad_e_mail }}</div>
+          <div class="text-subtitle1 q-mb-md">{{ user?.nome }}</div>
           <q-btn
             data-cy="btn-logout"
             color="negative"
@@ -93,7 +93,7 @@
 
         <div class="row items-center q-pt-sm">
           <div class="col flex-end">
-            <div class="text-subtitle1 q-mb-xs">{{ user?.cad_e_mail }}</div>
+            <div class="text-subtitle1 q-mb-xs">{{ user?.nome }}</div>
             <q-btn
               data-cy="btn-logout"
               color="negative"

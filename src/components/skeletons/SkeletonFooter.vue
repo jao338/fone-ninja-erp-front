@@ -12,10 +12,10 @@
         </div>
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-12 flex items-center" :class="$q.screen.gt.xs ? 'justify-end' : 'justify-center'">
           <a
-            href="https://www.lipsum.com/"
+            href="https://www.linkedin.com/in/jo%C3%A3o-henrique-799129267/"
             class="link-footer"
             target="_blank"
-          >{{ $t('lorem') }}</a>
+          >João Henrique</a>
           <span>. {{ $t('todosDireitosReservados') }} <span class="text-bold">{{ dayjs().format('YYYY') }}</span></span>
         </div>
       </div>

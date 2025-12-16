@@ -17,7 +17,7 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'home',
         meta: {
-          // requiresAuth: true,
+          requiresAuth: true,
           breadCrumbLink: true,
           breadCrumbIcon: 'home',
           breadCrumbLabel: 'home',
@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'exemplo',
         meta: {
-          // requiresAuth: true,
+          requiresAuth: true,
           breadCrumbLink: true,
           breadCrumbIcon: 'example',
           breadCrumbLabel: 'exemplo',
@@ -64,29 +64,6 @@ const routes: RouteRecordRaw[] = [
               breadCrumbLabel: 'editar',
             },
             component: () => import('pages/Example/ExampleForm.vue')
-          },
-        ]
-      },
-      {
-        path: 'componentes',
-        meta: {
-          // requiresAuth: true,
-          breadCrumbLink: true,
-          breadCrumbIcon: 'settings',
-          breadCrumbLabel: 'componentes',
-        },
-        redirect: { name: 'componentes' },
-        component: () => import('pages/Components/ComponentsLayout.vue'),
-        children: [
-          {
-            path: '',
-            name: 'componentes',
-            meta: {
-              breadCrumbLink: true,
-              breadCrumbIcon: 'settings',
-              breadCrumbLabel: 'componentes',
-            },
-            component: () => import('pages/Components/ComponentsPage.vue')
           },
         ]
       },
