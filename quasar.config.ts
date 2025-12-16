@@ -59,7 +59,7 @@ export default defineConfig((ctx) => {
       // analyze: true,
       env: {
         API_URL: ctx.dev ? "http://localhost/api/" : "http://localhost/api/",
-        APP_NAME: "CRM SOLUÇÕES",
+        APP_NAME: "FONE NINJA",
       },
       // rawDefine: {}
       // ignorePublicFolder: true,

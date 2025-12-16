@@ -6,16 +6,20 @@ import { useRouter } from 'vue-router';
 
 import { type AuthForm } from 'pages/Login/Util/LoginInterface';
 import { type User } from 'src/util/Interface';
+import useNotify from 'src/composables/useNotify';
 
 export default function LoginService(url: string) {
   const { index, create, update, destroy } = useApi(url);
+  const { successMessage } = useNotify()
   const router = useRouter();
   const auth = authStore();
 
-  async function fetchLogin(form: AuthForm): Promise<void> {
+  async function fetchLogin(form: AuthForm, message: string): Promise<void> {
     await csrfCookie();
 
-    const { data } = await create<User>(form);
+    const { data } = await create<User>(form, false);
+
+    successMessage(message);
 
     auth.setUserData(data);
 

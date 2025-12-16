@@ -19,17 +19,17 @@
           <q-card-section>
             <q-form ref="formRef" @submit.prevent="login" class="q-gutter-lg">
               <InputText
-                v-model="form.cad_e_mail"
-                data-cy="text-cad_e_mail"
+                v-model="form.email"
+                data-cy="text-email"
                 has-request-errors
                 :label="$t('email')"
                 :rules="[validaterequiredField, validateEmail]"
-                :request-errors="{ errors: errors, field: 'cad_e_mail'} "
+                :request-errors="{ errors: errors, field: 'email'} "
               />
 
               <InputPassword
-                data-cy="text-cad_senha"
-                v-model="form.cad_senha"
+                data-cy="text-password"
+                v-model="form.password"
                 :label="$t('senha')"
                 :rules="[validaterequiredField]"
               />
@@ -46,15 +46,6 @@
                 />
               </q-card-actions>
 
-              <q-card-actions class="justify-between q-pa-none q-mt-xl">
-                <InputCheckbox
-                  v-model="form.remember"
-                  :label="$t('lembrarMe')"
-                />
-
-                <q-img src="~src/assets/images/crm_logo_blue.png" width="80px"/>
-
-              </q-card-actions>
             </q-form>
           </q-card-section>
         </q-card>
@@ -77,7 +68,6 @@ import useLoginService from './Util/LoginService';
 
 import InputText from 'src/components/inputs/InputText.vue';
 import InputPassword from 'src/components/inputs/InputPassword.vue';
-import InputCheckbox from 'src/components/inputs/InputCheckbox.vue';
 import ButtonGeneric from 'src/components/buttons/ButtonGeneric.vue';
 import LogoLogin from 'src/components/utils/LogoLogin.vue';
 
@@ -90,15 +80,14 @@ const errors = ref<RequestErrors>({});
 const loadingLogin = ref<boolean>(false);
 const formRef = ref<HTMLFormElement | null>(null);
 const form = ref<AuthForm>({
-  cad_e_mail: '',
-  cad_senha: '',
-  remember: true,
+  email: '',
+  password: '',
 });
 
 async function login(): Promise<void> {
   toggleLoading(loadingLogin);
   try {
-    await fetchLogin(form.value);
+    await fetchLogin(form.value, t('loginFeitoSucesso'));
   } catch (error: any) {
     errors.value = error.response?.data.errors ?? {};
   } finally {

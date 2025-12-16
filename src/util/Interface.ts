@@ -23,10 +23,9 @@ export type GsapTarget          = gsap.TweenTarget;
 
 export interface User {
   token: string;
-  cad_e_mail: string;
-  cad_razao_social: string;
-  cad_cnpj: string;
-  id_empresa: string;
+  email: string;
+  nome: string;
+  uuid: string;
 }
 
 export interface RequestErrors {
