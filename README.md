@@ -1,43 +1,69 @@
-# Quasar App (front-padrao)
+# Fone Ninja - Desafio Técnico
 
-A Quasar Project
+Este projeto utiliza **Quasar Framework + Vue 3 + Typescript** rodando em containers Docker.
 
-## Install the dependencies
+---
+## 🧱 Stack
+
+* Node.js
+* Quasar Framework (Vite)
+* Vue 3
+* TypeScript
+* Pinia
+* Vue Router
+* Docker + Docker Compose
+
+---
+
+## 🚀 Executando com Docker
+
+Este projeto já está preparado para execução via Docker. **Não é necessário instalar Node.js ou dependências localmente**.
+
+### Pré-requisitos
+
+* Docker
+* Docker Compose
+
+### Subir o projeto
+
+Na raiz do projeto, execute:
+
+```bash
+docker compose up -d --build
+```
+
+A aplicação estará disponível em:
+
+```
+http://localhost:9000
+```
+
+### Parar o projeto
+
+```bash
+docker compose down
+```
+
+---
+
+## 🛠️ Execução local (sem Docker)
+
+### Instalar dependências
 
 ```bash
 yarn
-# or
+# ou
 npm install
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Rodar em modo desenvolvimento
 
 ```bash
 quasar dev
 ```
 
-### Lint the files
+Acesse:
 
-```bash
-yarn lint
-# or
-npm run lint
 ```
-
-### Format the files
-
-```bash
-yarn format
-# or
-npm run format
+http://localhost:9000
 ```
-
-### Build the app for production
-
-```bash
-quasar build
-```
-
-### Customize the configuration
-
-See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-vite/quasar-config-js).
