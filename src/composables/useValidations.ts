@@ -8,7 +8,7 @@ export default function useValidations() {
   const { calculatePasswordStrength } = useHelpers();
   const { t } = useI18n();
 
-  function validaterequiredField(val: unknown): boolean | string {
+  function validateRequiredField(val: unknown): boolean | string {
     if (val == null) return t('campoObrigatorio');
 
     const { getInputType } = useHelpers();
@@ -96,7 +96,7 @@ export default function useValidations() {
   }
 
   return {
-    validaterequiredField,
+    validateRequiredField,
     validateDate,
     validateDateTime,
     validateEmail,

@@ -1,5 +1,5 @@
 <template>
-  <CardGeneric :label="$t('exemplo')">
+  <CardGeneric :label="$t('produto')">
       <q-form
         ref="formRef"
         @submit.prevent="searchData()"
@@ -7,7 +7,33 @@
       >
         <q-card-section class="row col-12 justify-start">
           <InputText
-            :label="t('textoExemplo')"
+            v-model="form.nome"
+            :label="t('nome')"
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
+          />
+          <InputMoney
+            v-model="form.custo_medio"
+            :label="t('custoMedio')"
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
+          />
+          <InputMoney
+            v-model="form.preco_venda"
+            :label="t('precoVenda')"
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
+          />
+          <InputText
+            v-model="form.quantidade"
+            :label="t('quantidade')"
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
+          />
+          <InputDateTime
+            v-model="form.criado_em"
+            :label="t('criadoEm')"
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
+          />
+          <InputDateTime
+            v-model="form.atualizado_em"
+            :label="t('atualizadoEm')"
             class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
           />
         </q-card-section>
@@ -61,23 +87,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
-import { exampleStore } from 'stores/example';
+import { productStore } from 'stores/product';
 
 import CardGeneric from 'components/cards/CardGeneric.vue';
 import ButtonGeneric from 'components/buttons/ButtonGeneric.vue';
 import DefaultTable from 'components/tables/DefaultTable.vue';
 import InputText from 'components/inputs/InputText.vue';
+import InputMoney from '../../components/inputs/InputMoney.vue';
+import InputDateTime from '../../components/inputs/InputDateTime.vue';
 
 import useDialog from 'src/composables/useDialog';
 import useHelpers from 'src/composables/useHelpers';
-import useExampleService from './Util/ExampleService';
+import useProductService from './Util/ProductService';
 import useFormat from 'src/composables/useFormat';
 
 import { type QTableColumn } from 'quasar';
-import { type Exemplo } from './Util/ExampleInterface';
+import { type Product } from './Util/ProductInterface';
 import { type Pagination, type RequestErrors } from 'src/util/Interface';
 
 const { t } = useI18n();
@@ -89,44 +117,69 @@ const {
 } = useHelpers();
 const { formatDate, formatSizes } = useFormat();
 const { confirmDelete } = useDialog();
-const { index, destroy } = useExampleService('exemplo');
+const { index, destroy } = useProductService('products');
 
-const useExampleStore = exampleStore();
+const useProductStore = productStore();
 
 const loadingSubmit = ref<boolean>(false);
 const loadingData = ref<boolean>(false);
 const formRef = ref<HTMLFormElement | null>(null);
 const errors = ref<RequestErrors>({});
-const rows = ref<Exemplo[]>([]);
-const pagination = ref<Pagination>(getPagination({ sortBy: 'id_example' }));
-const form = ref<Exemplo>({
+const rows = ref<Product[]>([]);
+const pagination = ref<Pagination>(getPagination({ sortBy: 'id' }));
+const form = ref<Product>({
   uuid: '',
-  uuid_input_select: '',
-  dsc_input_select: '',
-  input_text: '',
-  input_date: '',
-  input_checkbox: false,
-  input_advanced_search: '',
-  input_radio: '',
-  input_money: 0,
-  input_password: '',
-  input_file: null,
+  nome: '',
+  custo_medio: 0,
+  preco_venda: 0,
+  quantidade: 0,
+  criado_em: '',
+  atualizado_em: '',
 });
 
 const router = useRouter();
 
 const columns: QTableColumn[] = [
   {
-    name: 'input_text',
-    field: 'input_text',
-    label: t('colunaUm'),
+    name: 'nome',
+    field: 'nome',
+    label: t('nome'),
     sortable: true,
     align: 'left',
   },
   {
-    name: 'input_date',
-    field: 'input_date',
-    label: t('colunaDois'),
+    name: 'custo_medio',
+    field: 'custo_medio',
+    label: t('custoMedio'),
+    sortable: true,
+    align: 'left',
+  },
+  {
+    name: 'preco_venda',
+    field: 'preco_venda',
+    label: t('precoVenda'),
+    sortable: true,
+    align: 'left',
+  },
+  {
+    name: 'quantidade',
+    field: 'quantidade',
+    label: t('quantidade'),
+    sortable: true,
+    align: 'left',
+  },
+  {
+    name: 'criado_em',
+    field: 'criado_em',
+    label: t('criadoEm'),
+    sortable: true,
+    align: 'left',
+    format: val => formatDate(val)
+  },
+  {
+    name: 'atualizado_em',
+    field: 'atualizado_em',
+    label: t('atualizadoEm'),
     sortable: true,
     align: 'left',
     format: val => formatDate(val)
@@ -139,29 +192,13 @@ const columns: QTableColumn[] = [
   },
 ];
 
-const examples = computed<Exemplo[]>(() => [
-  {
-    uuid: 'A09I1091U1',
-    uuid_input_select: 'IOAJAUIHA9181789262972',
-    input_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl eget aliquam tincidunt, nisl nisl tincidunt nisl.',
-    input_date: '2001-09-11',
-    input_checkbox: false,
-    input_advanced_search: 'a1531',
-    input_radio: '1',
-    input_money: 84984,
-    input_file: null,
-    input_password: 'ioaaja',
-    dsc_input_select: 'dsc_input_select'
-  }
-]);
-
 async function searchData(props: any = {}): Promise<void> {
   setPagination(
     pagination.value,
     props.pagination?.page ?? 1,
     props.pagination?.rowsPerPage ?? 20,
     props.pagination?.rowsNumber ?? 0,
-    props.pagination?.sortBy ?? 'id_exemplo',
+    props.pagination?.sortBy ?? 'id',
     props.pagination?.descending ?? false,
   );
   await fetchData();
@@ -171,10 +208,10 @@ async function fetchData(): Promise<void> {
   try {
     toggleLoading(loadingData);
 
-    const data = await index<Exemplo>({
+    const data = await index<Product>({
       ...form.value,
       page: pagination.value.page,
-      per_page: pagination.value.rowsPerPage,
+      por_pagina: pagination.value.rowsPerPage,
       tipo_ordenacao: pagination.value.descending ? 'DESC' : 'ASC',
       campo_ordenacao: pagination.value.sortBy,
     });
@@ -195,21 +232,20 @@ async function fetchData(): Promise<void> {
   }
 }
 
-async function edit(uuid_example: string): Promise<void> {
-  useExampleStore.setIdExample(uuid_example);
+async function edit(uuid_product: string): Promise<void> {
+  useProductStore.setUuidProduct(uuid_product);
   await router.push({
-    name: 'exemplo-editar',
-    params: { uuid_exemplo: useExampleStore.idExample },
+    name: 'product-edit',
+    params: { uuid_product: useProductStore.uuid_product },
   });
 }
 
-
-function remove(uuid_exemplo: string): void {
+function remove(uuid_product: string): void {
   confirmDelete().onOk(() => {
     void (async () => {
       toggleLoading(loadingData);
       try {
-        await destroy(uuid_exemplo);
+        await destroy(uuid_product);
       } finally {
         toggleLoading(loadingData);
       }
@@ -218,15 +254,12 @@ function remove(uuid_exemplo: string): void {
 }
 
 defineOptions({
-  name: 'Example',
+  name: 'ProductPage',
 });
 
 onMounted(async () => {
-  useExampleStore.resetIdExample();
+  useProductStore.resetUuidProduct();
   await searchData();
-
-  // Apenas como exemplo
-  rows.value = examples.value;
 });
 
 </script>

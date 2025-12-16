@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-lg">
     <div class="row justify-between items-center">
-      <TitleH4 :title="$t('exemplo')" :caption="$t('exemploCaption')" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12"/>
+      <TitleH4 :title="$t('produto')" :caption="$t('produtoCaption')" class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12"/>
       <div class="row col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
         <div class="full-width flex-end">
           <Breadcrumb v-if="!isMobile"/>
@@ -14,7 +14,7 @@
           icon="add"
           :label="$t('adicionar')"
           :aria-label="$t('adicionar')"
-          :to="{ name: 'exemplo-adicionar' }"
+          :to="{ name: 'product-add' }"
           data-cy="btn-add"
           :size="formatSizes('button')"
         />
@@ -44,17 +44,17 @@ const { t } = useI18n()
 const $q = useQuasar();
 const router = useRouter();
 
-const isIndex = computed(() => router.currentRoute.value.name === 'exemplo')
+const isIndex = computed(() => router.currentRoute.value.name === 'product')
 const isMobile = computed<boolean>(() => $q.platform.is.mobile)
 
 useMeta(() => {
   return {
-    title: t('paginaExemplo'),
+    title: t('produto'),
   };
 });
 
 defineOptions({
-  name: 'ExampleLayout',
+  name: 'ProductLayout',
 });
 
 </script>
