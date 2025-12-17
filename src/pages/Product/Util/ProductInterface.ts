@@ -8,9 +8,7 @@ export interface Product {
 export interface ProductFilter {
   uuid: string | null;
   nome: string;
-  custo_medio: number;
-  preco_venda: number;
-  quantidade: number;
+  quantidade: number | string;
   criado_em: string;
   atualizado_em: string;
 }

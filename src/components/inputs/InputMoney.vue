@@ -44,7 +44,10 @@ import { watch } from 'vue';
 
 const emits = defineEmits(['update:modelValue', 'change']);
 const props = defineProps({
-  modelValue: Number,
+  modelValue: {
+    type: [Number, String],
+    required: true
+  },
   clearable: {
     type: Boolean,
     default: true,
@@ -89,7 +92,7 @@ watch(
   () => props.modelValue,
   (newVal) => {
     if (newVal !== numberValue.value) {
-      setValue(newVal ?? null);
+      setValue(newVal as number ?? null);
     }
   }
 );

@@ -5,20 +5,10 @@
         @submit.prevent="searchData()"
         class="row q-pa-md q-col-gutter-md"
       >
-        <q-card-section class="row col-12 justify-start">
+        <q-card-section class="row col-12 justify-start q-col-gutter-md">
           <InputText
             v-model="form.nome"
             :label="t('nome')"
-            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
-          />
-          <InputMoney
-            v-model="form.custo_medio"
-            :label="t('custoMedio')"
-            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
-          />
-          <InputMoney
-            v-model="form.preco_venda"
-            :label="t('precoVenda')"
             class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
           />
 
@@ -28,13 +18,13 @@
             class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
           />
 
-          <InputDateTime
+          <InputDate
             v-model="form.criado_em"
             :label="t('criadoEm')"
             class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
           />
 
-          <InputDateTime
+          <InputDate
             v-model="form.atualizado_em"
             :label="t('atualizadoEm')"
             class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
@@ -99,8 +89,7 @@ import CardGeneric from 'components/cards/CardGeneric.vue';
 import ButtonGeneric from 'components/buttons/ButtonGeneric.vue';
 import DefaultTable from 'components/tables/DefaultTable.vue';
 import InputText from 'components/inputs/InputText.vue';
-import InputMoney from '../../components/inputs/InputMoney.vue';
-import InputDateTime from '../../components/inputs/InputDateTime.vue';
+import InputDate from '../../components/inputs/InputDate.vue';
 
 import useDialog from 'src/composables/useDialog';
 import useHelpers from 'src/composables/useHelpers';
@@ -133,9 +122,7 @@ const pagination = ref<Pagination>(getPagination({ sortBy: 'id' }));
 const form = ref<ProductFilter>({
   uuid: '',
   nome: '',
-  custo_medio: 0,
-  preco_venda: 0,
-  quantidade: 0,
+  quantidade: '',
   criado_em: '',
   atualizado_em: '',
 });
@@ -147,35 +134,37 @@ const columns: QTableColumn[] = [
     name: 'nome',
     field: 'nome',
     label: t('nome'),
-    sortable: true,
+    sortable: false,
     align: 'left',
   },
   {
     name: 'custo_medio',
     field: 'custo_medio',
     label: t('custoMedio'),
-    sortable: true,
+    sortable: false,
     align: 'left',
+    format: val => 'R$ ' + val
   },
   {
     name: 'preco_venda',
     field: 'preco_venda',
     label: t('precoVenda'),
-    sortable: true,
+    sortable: false,
     align: 'left',
+    format: val => 'R$ ' + val
   },
   {
     name: 'quantidade',
     field: 'quantidade',
     label: t('quantidade'),
-    sortable: true,
+    sortable: false,
     align: 'left',
   },
   {
     name: 'criado_em',
     field: 'criado_em',
     label: t('criadoEm'),
-    sortable: true,
+    sortable: false,
     align: 'left',
     format: val => formatDate(val)
   },
@@ -183,7 +172,7 @@ const columns: QTableColumn[] = [
     name: 'atualizado_em',
     field: 'atualizado_em',
     label: t('atualizadoEm'),
-    sortable: true,
+    sortable: false,
     align: 'left',
     format: val => formatDate(val)
   },
@@ -250,6 +239,7 @@ function remove(uuid_product: string): void {
       try {
         await destroy(uuid_product);
       } finally {
+        await fetchData()
         toggleLoading(loadingData);
       }
     })();

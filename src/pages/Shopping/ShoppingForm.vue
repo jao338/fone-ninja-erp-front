@@ -25,7 +25,7 @@
 
       <InputAdvancedSearch
         class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9"
-        v-model="produto"
+        v-model="produto.nome"
         :label="$t('produto')"
         :clearable="true"
         modal="Produto"
@@ -106,9 +106,10 @@ import useHelpers from 'src/composables/useHelpers';
 import useLookups from 'src/composables/useLookups';
 import useShoppingService from './Util/ShoppingService';
 
-import type { QTableColumn, useMeta } from 'quasar';
+import { type QTableColumn, useMeta } from 'quasar';
 import type { OptionsSelect, Pagination, RequestErrors, SkeletonItem } from 'src/util/Interface';
 import type { Shopping } from './Util/ShoppingInterface';
+import type { Product } from 'pages/Product/Util/ProductInterface';
 
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref } from 'vue';
@@ -127,8 +128,10 @@ const useShoppingStore = shoppingStore();
 const loadingData = ref<boolean>(false);
 const loadingSubmit = ref<boolean>(false);
 const loadingSuppliers = ref<boolean>(false);
+const loadingProducts = ref<boolean>(false);
 
 const optionsSuppliers = ref<OptionsSelect[]>([]);
+const optionsProducts = ref<OptionsSelect[]>([]);
 const pagination = ref<Pagination>(getPagination({ sortBy: 'id' }));
 
 const errors = ref<RequestErrors>({});
@@ -136,6 +139,14 @@ const form = ref<Shopping>({
   uuid: '',
   fornecedor_uuid: '',
   itens: [],
+})
+
+const produto = ref<Product>({
+  uuid: '',
+  nome: '',
+  custo_medio: 0,
+  preco_venda: 0,
+  quantidade: 0,
 })
 
 const columns: QTableColumn[] = [
