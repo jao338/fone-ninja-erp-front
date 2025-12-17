@@ -112,7 +112,10 @@ export default {
   compra: 'Compra',
   compraCaption: 'Nesta página você pode criar e cancelar compras, atualizando o estoque',
   venda: 'Venda',
+  vendaCaption: 'Nesta página você pode criar e cancelar vendas, atualizando o estoque',
   total: 'Total',
   fornecedor: 'Fornecedor',
   precoUnitario: 'Preço unitário',
+  excluidoSucesso: 'Excluido com Sucesso',
+  lucro: 'Lucro',
 };

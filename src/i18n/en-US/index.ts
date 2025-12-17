@@ -108,6 +108,9 @@ export default {
   compraCaption: 'On this page you can create and cancel purchases, updating the inventory',
   venda: 'Sale',
   total: 'Total',
+  vendaCaption: 'On this page you can create and cancel sales, updating your inventory.',
   fornecedor: 'Supplier',
   precoUnitario: 'Unit Price',
+  excluidoSucesso: 'Deleted Successfully',
+  lucro: 'Profit',
 };

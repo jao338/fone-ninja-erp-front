@@ -6,13 +6,13 @@ export default function useLookups() {
     const { data } = await api.get('lookups/suppliers');
     return data;
   }
-  async function lookupProducts(): Promise<{ data: OptionsSelect[] }> {
-    const { data } = await api.get('lookups/products');
+  async function lookupClients(): Promise<{ data: OptionsSelect[] }> {
+    const { data } = await api.get('lookups/clients');
     return data;
   }
 
   return {
     lookupSuppliers,
-    lookupProducts,
+    lookupClients,
   };
 }

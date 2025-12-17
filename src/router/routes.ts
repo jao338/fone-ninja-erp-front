@@ -107,6 +107,49 @@ const routes: RouteRecordRaw[] = [
           },
         ]
       },
+      {
+        path: 'sales',
+        meta: {
+          requiresAuth: true,
+          breadCrumbLink: true,
+          breadCrumbIcon: '',
+          breadCrumbLabel: 'venda',
+        },
+        redirect: { name: 'sale' },
+        component: () => import('pages/Sale/SaleLayout.vue'),
+        children: [
+          {
+            path: '',
+            name: 'sale',
+            meta: {
+              breadCrumbLink: true,
+              breadCrumbIcon: 'home',
+              breadCrumbLabel: 'venda',
+            },
+            component: () => import('pages/Sale/SalePage.vue')
+          },
+          {
+            path: 'add',
+            name: 'sale-add',
+            meta: {
+              breadCrumbLink: false,
+              breadCrumbIcon: 'add',
+              breadCrumbLabel: 'adicionar',
+            },
+            component: () => import('pages/Sale/SaleForm.vue')
+          },
+          {
+            path: 'edit/:uuid_sale',
+            name: 'sale-edit',
+            meta: {
+              breadCrumbLink: false,
+              breadCrumbIcon: 'edit',
+              breadCrumbLabel: 'editar',
+            },
+            component: () => import('pages/Sale/SaleForm.vue')
+          },
+        ]
+      },
     ],
   },
   {
