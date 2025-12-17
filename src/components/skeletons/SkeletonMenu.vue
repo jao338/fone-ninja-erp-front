@@ -41,11 +41,21 @@ const linksList = computed<MenuItem[]>(() => [
   {
     title: t('produto', 2),
     icon: 'inventory_2',
+    link: '/products',
+  },
+  {
+    title: t('compra', 2) + '/' + t('venda', 2),
+    icon: 'account_circle',
     subLinks: [
       {
-        title: t('produto', 2),
-        icon: 'inventory_2',
-        link: '/products',
+        title: t('compra', 2),
+        icon: 'group',
+        link: '/shoppings',
+      },
+      {
+        title: t('venda', 2),
+        icon: 'settings',
+        link: '/sales',
       },
     ],
     defaultOpen: false,

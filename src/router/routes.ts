@@ -9,9 +9,6 @@ const routes: RouteRecordRaw[] = [
       breadCrumbIcon: 'home',
       breadCrumbLabel: 'paginaInicial'
     },
-    redirect: {
-      name: 'login',
-    },
     children: [
       {
         path: '',
@@ -29,10 +26,10 @@ const routes: RouteRecordRaw[] = [
         meta: {
           requiresAuth: true,
           breadCrumbLink: true,
-          breadCrumbIcon: 'product',
+          breadCrumbIcon: '',
           breadCrumbLabel: 'produto',
         },
-        redirect: { name: 'product-index' },
+        redirect: { name: 'product' },
         component: () => import('pages/Product/ProductLayout.vue'),
         children: [
           {
@@ -40,7 +37,7 @@ const routes: RouteRecordRaw[] = [
             name: 'product',
             meta: {
               breadCrumbLink: true,
-              breadCrumbIcon: 'product',
+              breadCrumbIcon: '',
               breadCrumbLabel: 'produto',
             },
             component: () => import('pages/Product/ProductPage.vue')
@@ -72,10 +69,10 @@ const routes: RouteRecordRaw[] = [
         meta: {
           requiresAuth: true,
           breadCrumbLink: true,
-          breadCrumbIcon: 'shopping',
+          breadCrumbIcon: '',
           breadCrumbLabel: 'compra',
         },
-        redirect: { name: 'shopping-index' },
+        redirect: { name: 'shopping' },
         component: () => import('pages/Shopping/ShoppingLayout.vue'),
         children: [
           {
@@ -83,7 +80,7 @@ const routes: RouteRecordRaw[] = [
             name: 'shopping',
             meta: {
               breadCrumbLink: true,
-              breadCrumbIcon: 'shopping',
+              breadCrumbIcon: 'home',
               breadCrumbLabel: 'compra',
             },
             component: () => import('pages/Shopping/ShoppingPage.vue')

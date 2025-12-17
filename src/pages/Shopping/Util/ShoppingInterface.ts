@@ -5,6 +5,7 @@ export interface Shopping {
 }
 
 export interface ShoppingItem{
+  uuid?: string,
   produto_uuid: string,
   quantidade: number,
   preco_unitario: number,

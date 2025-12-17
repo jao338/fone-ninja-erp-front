@@ -5,8 +5,7 @@
         @submit.prevent="searchData()"
         class="row q-pa-md q-col-gutter-md"
       >
-        <q-card-section class="row col-12 justify-start">
-
+        <q-card-section class="row col-12 justify-start q-col-gutter-md">
           <InputMoney
             v-model="form.total"
             :label="t('total')"
@@ -49,16 +48,6 @@
         <template v-slot:body-cell-actions="scope">
           <q-td :props="scope" class="q-gutter-sm">
             <ButtonGeneric
-              :data-cy="`btn-edit-${scope.rowIndex}`"
-              @click="edit(scope.row.uuid)"
-              color="primary"
-              icon="edit"
-              class="button-rounded"
-              flat
-              dense
-              no-caps
-            />
-            <ButtonGeneric
               :data-cy="`btn-remove-${scope.rowIndex}`"
               @click="remove(scope.row.uuid)"
               color="negative"
@@ -77,7 +66,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
 import { shoppingStore } from 'stores/shopping';
 
 import CardGeneric from 'components/cards/CardGeneric.vue';
@@ -120,50 +108,36 @@ const form = ref<ShoppingFilter>({
   atualizado_em: '',
 });
 
-const router = useRouter();
-
 const columns: QTableColumn[] = [
   {
-    name: 'nome',
-    field: 'nome',
-    label: t('nome'),
+    name: 'total',
+    field: 'total',
+    label: t('total'),
     sortable: true,
     align: 'left',
+    format: val => 'R$' + val
   },
   {
-    name: 'custo_medio',
-    field: 'custo_medio',
-    label: t('custoMedio'),
-    sortable: true,
-    align: 'left',
-  },
-  {
-    name: 'preco_venda',
-    field: 'preco_venda',
-    label: t('precoVenda'),
-    sortable: true,
-    align: 'left',
-  },
-  {
-    name: 'quantidade',
-    field: 'quantidade',
-    label: t('quantidade'),
-    sortable: true,
+    name: 'fornecedor',
+    field: 'fornecedor',
+    label: t('fornecedor'),
+    sortable: false,
     align: 'left',
   },
   {
     name: 'criado_em',
     field: 'criado_em',
     label: t('criadoEm'),
-    sortable: true,
+    sortable: false,
     align: 'left',
     format: val => formatDate(val)
   },
+
   {
     name: 'atualizado_em',
     field: 'atualizado_em',
     label: t('atualizadoEm'),
-    sortable: true,
+    sortable: false,
     align: 'left',
     format: val => formatDate(val)
   },
@@ -215,14 +189,6 @@ async function fetchData(): Promise<void> {
   }
 }
 
-async function edit(uuid_shopping: string): Promise<void> {
-  useShoppingStore.setUuidShopping(uuid_shopping);
-  await router.push({
-    name: 'shopping-edit',
-    params: { uuid_shopping: useShoppingStore.uuid_shopping },
-  });
-}
-
 function remove(uuid_shopping: string): void {
   confirmDelete().onOk(() => {
     void (async () => {
@@ -230,6 +196,7 @@ function remove(uuid_shopping: string): void {
       try {
         await destroy(uuid_shopping);
       } finally {
+        await fetchData();
         toggleLoading(loadingData);
       }
     })();

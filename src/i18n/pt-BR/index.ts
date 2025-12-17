@@ -109,4 +109,10 @@ export default {
   produtoCaption: 'Nesta página você pode criar os produtos e ver a quantidade em estoque',
   criadoSucesso: 'Registro criado com sucesso',
   editadoSucesso: 'Registro editado com sucesso',
+  compra: 'Compra',
+  compraCaption: 'Nesta página você pode criar e cancelar compras, atualizando o estoque',
+  venda: 'Venda',
+  total: 'Total',
+  fornecedor: 'Fornecedor',
+  precoUnitario: 'Preço unitário',
 };

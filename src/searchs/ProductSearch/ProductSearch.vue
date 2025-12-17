@@ -4,7 +4,7 @@
       <q-card-section>
         <div class="row justify-between items-center">
           <div class="text-h6">
-            {{ $t('pesquisaAvancada') }} - {{ $t('exemplo') }}
+            {{ $t('pesquisaAvancada') }} - {{ $t('produto', 2) }}
           </div>
           <ButtonGeneric icon="close" flat round dense @click="closeModal" />
         </div>
@@ -18,10 +18,27 @@
           @reset="handleResetForm"
         >
           <InputText
-            data-cy="text-dsc_exemplo"
-            class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"
-            v-model="form.dsc_exemplo"
-            :label="$t('exemplo')"
+            v-model="form.nome"
+            :label="t('nome')"
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
+          />
+
+          <InputText
+            v-model="form.quantidade"
+            :label="t('quantidade')"
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
+          />
+
+          <InputDate
+            v-model="form.criado_em"
+            :label="t('criadoEm')"
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
+          />
+
+          <InputDate
+            v-model="form.atualizado_em"
+            :label="t('atualizadoEm')"
+            class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
           />
 
           <q-card-actions class="col-12 justify-end">
@@ -51,7 +68,6 @@
         data-cy="table-example-search"
         class="full-width q-pa-md"
         :rows="listData"
-        :rowKey="'id_exemplo'"
         :columns="columns"
         :loading="loadingData"
         v-model:pagination="pagination"
@@ -67,15 +83,17 @@ import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import { type Pagination } from 'src/util/Interface';
-import { type Exemplo } from './Util/ExampleSearchInterface';
+import type { ProductFilter, Product } from 'pages/Product/Util/ProductInterface';
 import { type QTableColumn } from 'quasar';
 
 import useHelpers from 'src/composables/useHelpers';
-import ClienteSearchService from './Util/ExampleSearchService';
+import ProductSearchService from './Util/ProductSearchService';
 
 import InputText from 'src/components/inputs/InputText.vue';
 import ButtonGeneric from 'src/components/buttons/ButtonGeneric.vue';
 import DefaultTable from 'src/components/tables/DefaultTable.vue';
+import InputDate from 'components/inputs/InputDate.vue';
+import useFormat from 'src/composables/useFormat';
 
 const { t } = useI18n();
 
@@ -88,35 +106,74 @@ const {
   getPagination
 } = useHelpers();
 
-const { index } = ClienteSearchService('search/example');
+const { formatDate } = useFormat();
+
+const { index } = ProductSearchService('products');
 
 const modal = ref<boolean>(false);
 const loadingData = ref<boolean>(false);
 
-const listData = ref<Exemplo[]>([]);
+const listData = ref<Product[]>([]);
 
-const pagination = ref<Pagination>(getPagination({ sortBy: 'coluna_um' }));
+const pagination = ref<Pagination>(getPagination({ sortBy: 'id' }));
 const formRef = ref<HTMLFormElement | null>(null);
-const form = ref<Exemplo>({
-  dsc_exemplo: '',
+const form = ref<ProductFilter>({
+  uuid: '',
+  nome: '',
+  quantidade: '',
+  criado_em: '',
+  atualizado_em: '',
 });
 
 const columns: QTableColumn[] = [
   {
-    name: 'colunaUm',
-    field: 'coluna_um',
-    label: t('colunaUm'),
+    name: 'nome',
+    field: 'nome',
+    label: t('nome'),
     sortable: false,
     align: 'left',
   },
   {
-    name: 'colunaDois',
-    field: 'coluna_dois',
-    label: t('colunaDois'),
+    name: 'custo_medio',
+    field: 'custo_medio',
+    label: t('custoMedio'),
+    sortable: false,
+    align: 'left',
+    format: val => 'R$ ' + val
+  },
+  {
+    name: 'preco_venda',
+    field: 'preco_venda',
+    label: t('precoVenda'),
+    sortable: false,
+    align: 'left',
+    format: val => 'R$ ' + val
+  },
+  {
+    name: 'quantidade',
+    field: 'quantidade',
+    label: t('quantidade'),
     sortable: false,
     align: 'left',
   },
+  {
+    name: 'criado_em',
+    field: 'criado_em',
+    label: t('criadoEm'),
+    sortable: false,
+    align: 'left',
+    format: val => formatDate(val)
+  },
+  {
+    name: 'atualizado_em',
+    field: 'atualizado_em',
+    label: t('atualizadoEm'),
+    sortable: false,
+    align: 'left',
+    format: val => formatDate(val)
+  },
 ];
+
 const emits = defineEmits(['emitValue']);
 
 async function searchData(props: any = {}): Promise<void> {
@@ -132,7 +189,7 @@ async function fetchData(): Promise<void> {
   try {
     toggleLoading(loadingData);
 
-    const data = await index<Exemplo>({
+    const data = await index<Product>({
       ...form.value,
       page: pagination.value.page,
       per_page: pagination.value.rowsPerPage,
@@ -174,7 +231,7 @@ function closeModal(): void {
 defineExpose({ openModal });
 
 defineOptions({
-  name: 'ExampleSearch',
+  name: 'ProductSearch',
 });
 
 onMounted(() => {

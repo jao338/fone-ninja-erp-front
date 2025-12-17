@@ -104,4 +104,10 @@ export default {
   produtoCaption: 'On this page you can create products and view their stock levels.',
   criadoSucesso: 'Record created successfully',
   editadoSucesso: 'Record edited successfully',
+  compra: 'Shopping',
+  compraCaption: 'On this page you can create and cancel purchases, updating the inventory',
+  venda: 'Sale',
+  total: 'Total',
+  fornecedor: 'Supplier',
+  precoUnitario: 'Unit Price',
 };

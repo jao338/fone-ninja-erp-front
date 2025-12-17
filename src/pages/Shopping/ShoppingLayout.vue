@@ -14,7 +14,7 @@
           icon="add"
           :label="$t('adicionar')"
           :aria-label="$t('adicionar')"
-          :to="{ name: 'product-add' }"
+          :to="{ name: 'shopping-add' }"
           data-cy="btn-add"
           :size="formatSizes('button')"
         />
