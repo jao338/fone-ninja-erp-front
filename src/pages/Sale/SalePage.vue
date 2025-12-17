@@ -23,6 +23,12 @@
             :label="t('atualizadoEm')"
             class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12"
           />
+
+          <InputRadio
+            v-model="form.ativo"
+            :options="optionsRadio"
+          />
+
         </q-card-section>
         <q-card-actions class="col-12 justify-end q-mt-lg q-pa-none">
           <ButtonGeneric
@@ -48,6 +54,7 @@
         <template v-slot:body-cell-actions="scope">
           <q-td :props="scope" class="q-gutter-sm">
             <ButtonGeneric
+              v-if="scope.row.ativo"
               :data-cy="`btn-remove-${scope.rowIndex}`"
               @click="remove(scope.row.uuid)"
               color="negative"
@@ -66,22 +73,23 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { shoppingStore } from 'stores/shopping';
+import { saleStore } from 'stores/sales';
 
 import CardGeneric from 'components/cards/CardGeneric.vue';
 import ButtonGeneric from 'components/buttons/ButtonGeneric.vue';
 import DefaultTable from 'components/tables/DefaultTable.vue';
 import InputMoney from '../../components/inputs/InputMoney.vue';
 import InputDate from '../../components/inputs/InputDate.vue';
+import InputRadio from '../../components/inputs/InputRadio.vue';
 
 import useDialog from 'src/composables/useDialog';
 import useHelpers from 'src/composables/useHelpers';
-import useShoppingService from './Util/ShoppingService';
+import useSaleService from './Util/SaleService';
 import useFormat from 'src/composables/useFormat';
 
 import type { QTableColumn } from 'quasar';
-import type { Shopping, ShoppingFilter } from './Util/ShoppingInterface';
-import type { Pagination, RequestErrors } from 'src/util/Interface';
+import type { Sale, SaleFilter } from './Util/SaleInterface';
+import type { Pagination, RadioOptions, RequestErrors } from 'src/util/Interface';
 
 const { t } = useI18n();
 
@@ -92,35 +100,49 @@ const {
 } = useHelpers();
 const { formatDate, formatSizes } = useFormat();
 const { confirmDelete } = useDialog();
-const { index, destroy } = useShoppingService('shopping');
+const { index, destroy } = useSaleService('sale');
 
-const useShoppingStore = shoppingStore();
+const useSaleStore = saleStore();
 
 const loadingSubmit = ref<boolean>(false);
 const loadingData = ref<boolean>(false);
 const formRef = ref<HTMLFormElement | null>(null);
 const errors = ref<RequestErrors>({});
-const rows = ref<Shopping[]>([]);
+const rows = ref<Sale[]>([]);
 const pagination = ref<Pagination>(getPagination({ sortBy: 'id' }));
-const form = ref<ShoppingFilter>({
-  total: 0,
+const form = ref<SaleFilter>({
+  total: '',
   criado_em: '',
   atualizado_em: '',
+  ativo: '1',
+  lucro: '',
 });
+
+const optionsRadio = ref<RadioOptions[]>([
+  { label: t('ativo'), val: '1', color: 'blue' },
+  { label: t('inativo'), val: '0', color: 'red' },
+]);
 
 const columns: QTableColumn[] = [
   {
-    name: 'total',
-    field: 'total',
-    label: t('total'),
-    sortable: true,
+    name: 'ativo',
+    field: 'ativo',
+    label: t('ativo'),
+    sortable: false,
     align: 'left',
-    format: val => 'R$' + val
+    format: val => val ? t('ativo') : t('inativo')
   },
   {
-    name: 'fornecedor',
-    field: 'fornecedor',
-    label: t('fornecedor'),
+    name: 'lucro',
+    field: 'lucro',
+    label: t('lucro'),
+    sortable: false,
+    align: 'left',
+  },
+  {
+    name: 'cliente',
+    field: 'cliente',
+    label: t('cliente'),
     sortable: false,
     align: 'left',
   },
@@ -165,7 +187,7 @@ async function fetchData(): Promise<void> {
   try {
     toggleLoading(loadingData);
 
-    const data = await index<Shopping>({
+    const data = await index<Sale>({
       ...form.value,
       page: pagination.value.page,
       por_pagina: pagination.value.rowsPerPage,
@@ -189,12 +211,12 @@ async function fetchData(): Promise<void> {
   }
 }
 
-function remove(uuid_shopping: string): void {
+function remove(uuid_sale: string): void {
   confirmDelete().onOk(() => {
     void (async () => {
       toggleLoading(loadingData);
       try {
-        await destroy(uuid_shopping);
+        await destroy(uuid_sale);
       } finally {
         await fetchData();
         toggleLoading(loadingData);
@@ -204,11 +226,11 @@ function remove(uuid_shopping: string): void {
 }
 
 defineOptions({
-  name: 'ShoppingPage',
+  name: 'SalePage',
 });
 
 onMounted(async () => {
-  useShoppingStore.resetUuidShopping();
+  useSaleStore.resetUuidSale();
   await searchData();
 });
 

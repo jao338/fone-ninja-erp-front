@@ -1,7 +1,7 @@
 <template>
   <CardGeneric
-    :label="useShoppingStore.uuid_shopping ? $t('editar') : $t('adicionar')"
-    :icon="useShoppingStore.uuid_shopping ? 'edit' : 'add'"
+    :label="useSaleStore.uuid_sale ? $t('editar') : $t('adicionar')"
+    :icon="useSaleStore.uuid_sale ? 'edit' : 'add'"
   >
     <div v-if="loadingData" class="row q-col-gutter-md ">
       <template v-for="(element, index) in skeleton" :key="index">
@@ -15,14 +15,14 @@
       v-if="!loadingData"
     >
       <InputSelect
-        v-model="form.fornecedor_uuid"
+        v-model="form.cliente_uuid"
         class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6"
         :rules="[validateRequiredField]"
-        :label="$t('fornecedor')"
-        :options="optionsSuppliers"
-        :loading="loadingSuppliers"
+        :label="$t('cliente')"
+        :options="optionsClients"
+        :loading="loadingClients"
         hasRequestErrors
-        :requestErrors="{ errors: errors, field: 'fornecedor_uuid' }"
+        :requestErrors="{ errors: errors, field: 'cliente_uuid' }"
       />
 
       <InputAdvancedSearch
@@ -90,7 +90,7 @@
         <ButtonGeneric
           :label="$t('voltar')"
           :aria-label="$t('voltar')"
-          :to="{ name: 'shopping' }"
+          :to="{ name: 'sale' }"
           class="text-capitalize"
           color="primary"
           icon="arrow_back"
@@ -123,43 +123,43 @@ import InputMoney from 'components/inputs/InputMoney.vue';
 import useValidations from 'src/composables/useValidations';
 import useHelpers from 'src/composables/useHelpers';
 import useLookups from 'src/composables/useLookups';
-import useShoppingService from './Util/ShoppingService';
+import useSaleService from './Util/SaleService';
 
 
 import { type QTableColumn, useMeta } from 'quasar';
 import type { OptionsSelect, Pagination, RequestErrors, SkeletonItem } from 'src/util/Interface';
-import type { Shopping } from './Util/ShoppingInterface';
+import type { Sale } from './Util/SaleInterface';
 import type { Product } from 'pages/Product/Util/ProductInterface';
-import { type ShoppingItem } from './Util/ShoppingInterface';
+import { type SaleItem } from './Util/SaleInterface';
 
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { shoppingStore } from 'stores/shopping';
+import { saleStore } from 'stores/sales';
 
 const { validateRequiredField } = useValidations();
-const { lookupSuppliers } = useLookups();
+const { lookupClients } = useLookups();
 const { toggleLoading, fetchOptions, getPagination } = useHelpers();
-const { create, show } = useShoppingService('shopping');
+const { create, show } = useSaleService('sale');
 
 const { t } = useI18n();
 
-const useShoppingStore = shoppingStore();
+const useSaleStore = saleStore();
 
 const loadingData = ref<boolean>(false);
 const loadingSubmit = ref<boolean>(false);
-const loadingSuppliers = ref<boolean>(false);
+const loadingClients = ref<boolean>(false);
 
-const optionsSuppliers = ref<OptionsSelect[]>([]);
+const optionsClients = ref<OptionsSelect[]>([]);
 const pagination = ref<Pagination>(getPagination({ sortBy: 'id' }));
 
 const router = useRouter();
 
 const errors = ref<RequestErrors>({});
-const form = ref<Shopping>({
+const form = ref<Sale>({
   uuid: '',
-  fornecedor_uuid: '',
+  cliente_uuid: '',
   itens: [],
 })
 
@@ -222,7 +222,7 @@ const skeleton: SkeletonItem[] = [
 async function showForm(): Promise<void> {
   toggleLoading(loadingData);
   try {
-    const data = await show<Shopping>(useShoppingStore.uuid_shopping);
+    const data = await show<Sale>(useSaleStore.uuid_sale);
     form.value = data.data;
   } catch {
     return;
@@ -234,11 +234,11 @@ async function showForm(): Promise<void> {
 async function submitForm(): Promise<void> {
   toggleLoading(loadingSubmit);
   try {
-    if(!useShoppingStore.uuid_shopping){
-      const data = await create<Shopping>(form.value);
-      useShoppingStore.setUuidShopping(data.data.uuid);
+    if(!useSaleStore.uuid_sale){
+      const data = await create<Sale>(form.value);
+      useSaleStore.setUuidSale(data.data.uuid);
     }
-    await router.push({ name: 'shopping' })
+    await router.push({ name: 'sale' })
   } catch (error: any) {
     errors.value = error.response?.data.errors ?? {};
   } finally {
@@ -246,7 +246,7 @@ async function submitForm(): Promise<void> {
   }
 }
 
-function setValueProduto(element: ShoppingItem): void {
+function setValueProduto(element: SaleItem): void {
   const { uuid, ...rest } = element;
 
   form.value.itens.push({
@@ -259,23 +259,22 @@ function remove(index: number): void {
   form.value.itens.splice(index, 1);
 }
 
-
 useMeta(() => {
   return {
-    title: (t('compra') + ' - ') + (useShoppingStore.uuid_shopping ? t('editar') : t('adicionar')),
+    title: (t('compra') + ' - ') + (useSaleStore.uuid_sale ? t('editar') : t('adicionar')),
   };
 });
 
 defineOptions({
-  name: 'ShoppingForm',
+  name: 'SaleForm',
 });
 
 onMounted(async () => {
-  if(useShoppingStore.uuid_shopping){
+  if(useSaleStore.uuid_sale){
     await showForm();
   }
   await Promise.all([
-    fetchOptions(lookupSuppliers, optionsSuppliers, loadingSuppliers),
+    fetchOptions(lookupClients, optionsClients, loadingClients),
   ])
 })
 </script>
