@@ -23,7 +23,7 @@
                 data-cy="text-email"
                 has-request-errors
                 :label="$t('email')"
-                :rules="[validaterequiredField, validateEmail]"
+                :rules="[validateRequiredField, validateEmail]"
                 :request-errors="{ errors: errors, field: 'email'} "
               />
 
@@ -31,7 +31,7 @@
                 data-cy="text-password"
                 v-model="form.password"
                 :label="$t('senha')"
-                :rules="[validaterequiredField]"
+                :rules="[validateRequiredField]"
               />
 
               <q-card-actions class="q-pa-none">
@@ -71,7 +71,7 @@ import InputPassword from 'src/components/inputs/InputPassword.vue';
 import ButtonGeneric from 'src/components/buttons/ButtonGeneric.vue';
 import LogoLogin from 'src/components/utils/LogoLogin.vue';
 
-const { validaterequiredField, validateEmail } = useValidations();
+const { validateRequiredField, validateEmail } = useValidations();
 const { toggleLoading } = useHelpers();
 const { fetchLogin } = useLoginService('/login');
 const { t } = useI18n();

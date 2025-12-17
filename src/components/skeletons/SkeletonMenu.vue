@@ -39,18 +39,23 @@ const { menuOpen } = storeToRefs(store);
 
 const linksList = computed<MenuItem[]>(() => [
   {
-    title: t('exemplo', 2),
+    title: t('produto', 2),
+    icon: 'inventory_2',
+    link: '/products',
+  },
+  {
+    title: t('compra', 2) + '/' + t('venda', 2),
     icon: 'account_circle',
     subLinks: [
       {
-        title: t('paginaExemplo'),
+        title: t('compra', 2),
         icon: 'group',
-        link: '/exemplo',
+        link: '/shoppings',
       },
       {
-        title: t('componentesExemplo', 2),
+        title: t('venda', 2),
         icon: 'settings',
-        link: '/componentes',
+        link: '/sales',
       },
     ],
     defaultOpen: false,

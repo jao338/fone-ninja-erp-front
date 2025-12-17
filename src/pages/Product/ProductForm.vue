@@ -20,6 +20,8 @@
         maxLength="50"
         :rules="[validateRequiredField]"
         :label="$t('nome')"
+        hasRequestErrors
+        :requestErrors="{ errors: errors, field: 'nome' }"
       />
 
       <InputMoney
@@ -41,6 +43,8 @@
         class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3"
         :rules="[validateRequiredField]"
         :label="$t('quantidade')"
+        hasRequestErrors
+        :requestErrors="{ errors: errors, field: 'quantidade' }"
       />
 
       <q-card-actions class="col-12 justify-end q-mt-lg">
@@ -83,6 +87,7 @@ import { type Product } from './Util/ProductInterface';
 
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { productStore } from 'stores/product';
 import { useMeta } from 'quasar';
@@ -96,6 +101,8 @@ const useProductStore = productStore();
 
 const loadingData = ref<boolean>(false);
 const loadingSubmit = ref<boolean>(false);
+
+const router = useRouter();
 
 const errors = ref<RequestErrors>({});
 const form = ref<Product>({
@@ -128,8 +135,10 @@ async function submitForm(): Promise<void> {
     if(!useProductStore.uuid_product){
       const data = await create<Product>(form.value);
       useProductStore.setUuidProduct(data.data.uuid);
+      await router.push({ name: 'product' });
     }else{
       await update(useProductStore.uuid_product, form.value);
+      await router.push({ name: 'product' });
     }
 
   } catch (error: any) {

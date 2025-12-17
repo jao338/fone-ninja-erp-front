@@ -9,9 +9,6 @@ const routes: RouteRecordRaw[] = [
       breadCrumbIcon: 'home',
       breadCrumbLabel: 'paginaInicial'
     },
-    redirect: {
-      name: 'login',
-    },
     children: [
       {
         path: '',
@@ -29,10 +26,10 @@ const routes: RouteRecordRaw[] = [
         meta: {
           requiresAuth: true,
           breadCrumbLink: true,
-          breadCrumbIcon: 'product',
+          breadCrumbIcon: '',
           breadCrumbLabel: 'produto',
         },
-        redirect: { name: 'product-index' },
+        redirect: { name: 'product' },
         component: () => import('pages/Product/ProductLayout.vue'),
         children: [
           {
@@ -40,7 +37,7 @@ const routes: RouteRecordRaw[] = [
             name: 'product',
             meta: {
               breadCrumbLink: true,
-              breadCrumbIcon: 'product',
+              breadCrumbIcon: '',
               breadCrumbLabel: 'produto',
             },
             component: () => import('pages/Product/ProductPage.vue')
@@ -64,6 +61,49 @@ const routes: RouteRecordRaw[] = [
               breadCrumbLabel: 'editar',
             },
             component: () => import('pages/Product/ProductForm.vue')
+          },
+        ]
+      },
+      {
+        path: 'shoppings',
+        meta: {
+          requiresAuth: true,
+          breadCrumbLink: true,
+          breadCrumbIcon: '',
+          breadCrumbLabel: 'compra',
+        },
+        redirect: { name: 'shopping' },
+        component: () => import('pages/Shopping/ShoppingLayout.vue'),
+        children: [
+          {
+            path: '',
+            name: 'shopping',
+            meta: {
+              breadCrumbLink: true,
+              breadCrumbIcon: 'home',
+              breadCrumbLabel: 'compra',
+            },
+            component: () => import('pages/Shopping/ShoppingPage.vue')
+          },
+          {
+            path: 'add',
+            name: 'shopping-add',
+            meta: {
+              breadCrumbLink: false,
+              breadCrumbIcon: 'add',
+              breadCrumbLabel: 'adicionar',
+            },
+            component: () => import('pages/Shopping/ShoppingForm.vue')
+          },
+          {
+            path: 'edit/:uuid_shopping',
+            name: 'shopping-edit',
+            meta: {
+              breadCrumbLink: false,
+              breadCrumbIcon: 'edit',
+              breadCrumbLabel: 'editar',
+            },
+            component: () => import('pages/Shopping/ShoppingForm.vue')
           },
         ]
       },

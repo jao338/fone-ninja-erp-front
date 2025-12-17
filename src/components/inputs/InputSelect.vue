@@ -9,8 +9,8 @@
     lazy-rules
     options-cover
     input-debounce="300"
-    map-options
-    emit-value
+    :map-options="props.mapOptions"
+    :emit-value="props.emitValue"
     :readonly="readonly"
     :use-input="useInput"
     :hide-selected="useInput != true"
@@ -69,6 +69,14 @@ const props = defineProps({
   requestErrors: {
     type: Object as PropType<{ field: string; errors: RequestErrors }>,
     required: false,
+  },
+  mapOptions: {
+    type: Boolean,
+    default: true
+  },
+  emitValue: {
+    type: Boolean,
+    default: true
   }
 });
 

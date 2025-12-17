@@ -17,18 +17,17 @@ declare module 'vue' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 const api = axios.create({ baseURL: process.env.API_URL as string });
+api.defaults.withCredentials = true;
+api.defaults.withXSRFToken = true;
 
 export default boot(({ app }) => {
   const useAuthStore = authStore();
 
-  api.defaults.withCredentials = true;
-  api.defaults.withXSRFToken = true;
-
   api.interceptors.response.use(
     (response) => response,
-    async (error) => {
+    async (request) => {
 
-      if (error.response && [500, 504].includes(error.response.status)) {
+      if (request.response && [500, 504].includes(request.response.status)) {
         Notify.create({
           type: 'negative',
           message: 'Houve um erro. Tente novamente.',
@@ -37,25 +36,34 @@ export default boot(({ app }) => {
       }
 
       if (
-        error?.response &&
-        typeof error?.response.data?.message === 'string' &&
-        !error?.response.data?.errors
+        request?.response &&
+        typeof request?.response.data?.message === 'string' &&
+        !request?.response.data?.errors
       ) {
         Notify.create({
           type: 'negative',
-          message: error?.response.data.message,
+          message: request?.response.data.message,
         });
       }
 
-      if (error.response && [401, 419].includes(error.response.status)) {
+      if (request.response && [401, 419].includes(request.response.status)) {
         useAuthStore.setUserData(null);
-        window.location.href = '/login';
+        // window.location.href = '/login';
       }
 
       // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
-      return Promise.reject(error);
+      return Promise.reject(request);
     }
   );
+
+  api.interceptors.request.use((config) => {
+    const token = useAuthStore.user?.token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  });
 
   // for use inside Vue files (Options API) through this.$axios and this.$api
 

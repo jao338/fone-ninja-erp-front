@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import ExampleSearch from 'src/searchs/ExampleSearch/ExampleSearch.vue';
+import ProductSearch from 'src/searchs/ProductSearch/ProductSearch.vue';
 
 defineOptions({
   name: 'InputAdvancedSearch',
@@ -57,7 +57,7 @@ const displayValue = computed(() => {
 
 
 const components: Record<string, any> = {
-  Exemplo: ExampleSearch,
+  Produto: ProductSearch,
 };
 
 const componentModal = ref<any>(null);
